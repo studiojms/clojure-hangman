@@ -19,30 +19,30 @@
   (.contains word letter))
 
 (defn game "Hangman Game" [lives word letters]
-  (defn evaluate-try [lives word letters]
-    (println "Type a new letter: ")
-    (def new-letter (clojure.string/lower-case (read-line)))
-    (if (letter-matches? new-letter word)
-      (do
-        (println "Correct!")
-        (game lives word (conj letters new-letter)))
-      (do
-        (println "Wrong!")
-        (game (dec lives) word letters))))
+  (cond (= lives 0) (game-over)
+        (match-whole-word? (clojure.string/lower-case word) letters) (you-win)
+        :else
+        (do (println "Type a new letter: ")
+            (let [new-letter (clojure.string/lower-case (read-line)) lowercase-word (clojure.string/lower-case word)]
+              (if (letter-matches? new-letter lowercase-word)
+                (do
+                  (println "Correct!")
+                  (recur lives lowercase-word (conj letters new-letter)))
+                (do
+                  (println "Wrong!")
+                  (recur (dec lives) lowercase-word letters)))))))
 
-  (if (= lives 0)
-    (game-over)
-    (do
-      (println "You have" lives "live(s)")
-      (if (match-whole-word? (clojure.string/lower-case word) letters)
-        (you-win)
-        (evaluate-try lives (clojure.string/lower-case word) letters)))))
-
-; (defn fib [val]
-;   (if (= val 0) 1 (if (= val 1) 1 (if (>= val 2) (+ (fib (dec val)) (fib (- val 2)))))))
+; (defn fib [x]
+;   (loop [a 1 b 1 number 2]
+;     (if (= number x) b (recur b (+ a b) (inc number)))))
 
 ; (defn filter-values [values]
 ;   (filter #(or (< % 2) (> % 4)) values))
+
+; (defn sum [n]
+;   (loop [count 1 sum-val 0]
+;     (if (> count n) sum-val
+;         (recur (inc count) (+ sum-val count)))))
 
 (defn -main
   "I don't do a whole lot ... yet."
