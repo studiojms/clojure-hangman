@@ -18,7 +18,17 @@
 (defn letter-matches? [letter word]
   (.contains word letter))
 
+(defn print-revealed-word "Prints the part of the word that was already revealed" [lives word letters]
+  (println "Lives " lives)
+  (doseq [letter (seq word)]
+    (if (contains? letters (str letter))
+      (print letter " ")
+      (print "_" " ")))
+  (println)
+  (println))
+
 (defn game "Hangman Game" [lives word letters]
+  (print-revealed-word lives word letters)
   (cond (= lives 0) (game-over)
         (match-whole-word? (clojure.string/lower-case word) letters) (you-win)
         :else
