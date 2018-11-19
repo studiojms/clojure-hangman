@@ -2,12 +2,15 @@
   (:gen-class))
 
 (def lives-total 6)
+(def secret-word "PINEAPPLE")
 
 (defn game-over []
-  println "You lose")
+  (println "You lose. Try again.")
+  (println))
 
 (defn you-win []
-  println "You Win! Congratulations!")
+  (println "You Win! Congratulations!")
+  (println))
 
 (defn missing-letters [word letters]
   (remove #(contains? letters (str %)) word))
@@ -54,7 +57,11 @@
 ;     (if (> count n) sum-val
 ;         (recur (inc count) (+ sum-val count)))))
 
+(defn start-game "starts the game using the defined variables"
+  []
+  (game lives-total secret-word #{}))
+
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Hangman game"
   [& args]
-  (println "Hello, World!"))
+  (start-game))
